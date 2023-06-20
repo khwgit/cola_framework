@@ -1,7 +1,7 @@
 name: cola_framework
 description: A Flutter application framework that provides commonly used packages which depend on `go_router` and `riverpod`
 version: 0.0.1
-homepage: https://github.com/khwgit/cola-framework/
+homepage: https://github.com/khwgit/cola_framework
 publish_to: "none"
 
 environment:
