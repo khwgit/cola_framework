@@ -2,8 +2,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:meta/meta.dart';
 
-abstract class ServiceBase<State> extends StateController<State> {
-  ServiceBase(super.state);
+abstract class AppServiceBase<State> extends StateController<State> {
+  AppServiceBase(super.state);
 
   @protected
   Logger get logger;

@@ -1,3 +1,3 @@
 library service;
 
-export './src/cola_service_base/service_base.dart';
+export 'src/cola_service_base/app_service_base.dart';
