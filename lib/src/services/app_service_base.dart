@@ -71,11 +71,9 @@ abstract class AppServiceBase<State extends AppStateBase>
   void trace([
     List<dynamic> arguments = const [],
   ]) {
-    debug(() {
-      logger.fine(
-        '[${Trace.current(1).frames[0].member}(${arguments.map((e) => e.toString()).join(',')})]',
-      );
-    });
+    logger.fine(
+      '[${Trace.current(1).frames[0].member?.split('.').last}(${arguments.map((e) => e.toString()).join(',')})]',
+    );
   }
 
   @override
