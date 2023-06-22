@@ -16,6 +16,7 @@ dependencies:
   hooks_riverpod: ^2.3.6
   meta: ^1.9.1
   logging: ^1.2.0
+  stack_trace: ^1.11.0
 
 dev_dependencies:
   flutter_test:
