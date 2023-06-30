@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -39,7 +40,11 @@ abstract class AppRouteBase<State extends AppStateBase> extends ChangeNotifier {
       ref.listen(
         provider,
         (previous, next) {
-          if (previous != next) notifyListeners();
+          if (previous != next) {
+            SchedulerBinding.instance.addPostFrameCallback((_) {
+              notifyListeners();
+            });
+          }
         },
         fireImmediately: fireImmediately,
       );
