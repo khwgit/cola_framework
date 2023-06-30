@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
+import 'package:go_router/src/misc/errors.dart';
 
 import 'go_route_info.dart';
 
@@ -61,7 +62,7 @@ class GoRouterInfoState<T extends GoRouteInfo> implements GoRouterState {
   final T info;
 
   @override
-  Exception? get error => _state.error;
+  GoException? get error => _state.error;
 
   @override
   Object? get extra => _state.extra;
@@ -77,7 +78,6 @@ class GoRouterInfoState<T extends GoRouteInfo> implements GoRouterState {
 
   /// Get a location from route name and parameters.
   /// This is useful for redirecting to a named location.
-  @Deprecated('Use GoRouter.of(context).namedLocation instead')
   @override
   String namedLocation(
     String name, {

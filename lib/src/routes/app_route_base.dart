@@ -39,13 +39,9 @@ abstract class AppRouteBase<State extends AppStateBase> extends ChangeNotifier {
     for (var provider in providers) {
       ref.listen(
         provider,
-        (previous, next) {
-          if (previous != next) {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              notifyListeners();
-            });
-          }
-        },
+        (previous, next) => SchedulerBinding.instance.addPostFrameCallback((_) {
+          notifyListeners();
+        }),
         fireImmediately: fireImmediately,
       );
     }
