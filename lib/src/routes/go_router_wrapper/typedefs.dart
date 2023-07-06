@@ -1,3 +1,5 @@
+// ignore_for_file: implementation_imports
+
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
@@ -7,18 +9,9 @@ import 'package:go_router/src/misc/errors.dart';
 import 'go_route_info.dart';
 
 // --- RouteWrapper
-typedef GoRouteWrapperBuilder = Widget Function(
-  BuildContext context,
-  GoRouterState state,
-);
-typedef GoRouteWrapperPageBuilder = Page<void> Function(
-  BuildContext context,
-  GoRouterState state,
-);
-typedef GoRouteWrapperRedirect = FutureOr<String?> Function(
-  BuildContext context,
-  GoRouterState state,
-);
+typedef GoRouteWrapperBuilder = GoRouterWidgetBuilder;
+typedef GoRouteWrapperPageBuilder = GoRouterPageBuilder;
+typedef GoRouteWrapperRedirect = GoRouterRedirect;
 typedef GoRouteWrapperToLocation = String Function();
 
 // --- InfoRouteWrapper
@@ -44,16 +37,14 @@ typedef GoInfoRouteWrapperToInfo<T extends GoRouteInfo> = T Function(
 );
 
 // --- ShellRouteWrapper
-typedef GoShellRouteWrapperBuilder = Widget Function(
-  BuildContext context,
-  GoRouterState state,
-  Widget child,
-);
-typedef GoShellRouteWrapperPageBuilder = Page<void> Function(
-  BuildContext context,
-  GoRouterState state,
-  Widget child,
-);
+typedef GoShellRouteWrapperBuilder = ShellRouteBuilder;
+typedef GoShellRouteWrapperPageBuilder = ShellRoutePageBuilder;
+
+// --- StatefulShellRouteWrapper
+typedef GoStatefulShellRouteWrapperBuilder = StatefulShellRouteBuilder;
+typedef GoStatefulShellRouteWrapperPageBuilder = StatefulShellRoutePageBuilder;
+typedef GoStatefulShellNavigationContainerBuilder
+    = ShellNavigationContainerBuilder;
 
 class GoRouterInfoState<T extends GoRouteInfo> implements GoRouterState {
   const GoRouterInfoState(this._state, this.info);
