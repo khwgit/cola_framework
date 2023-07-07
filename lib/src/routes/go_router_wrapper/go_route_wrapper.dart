@@ -16,9 +16,9 @@ class GoRouteWrapper extends GoRouteWrapperBase {
     this.redirect,
   });
 
-  final GoRouteWrapperBuilder? builder;
-  final GoRouteWrapperPageBuilder? pageBuilder;
-  final GoRouteWrapperRedirect? redirect;
+  final GoRouterWidgetBuilder? builder;
+  final GoRouterPageBuilder? pageBuilder;
+  final GoRouterRedirect? redirect;
   GoRouteWrapperToLocation? $location;
 
   GoRoute $route({
@@ -117,6 +117,11 @@ class GoShellRouteWrapper extends GoRouteWrapperBase {
     this.pageBuilder,
   });
 
+  const GoShellRouteWrapper.indexedStack({
+    this.builder,
+    this.pageBuilder,
+  });
+
   final GoShellRouteWrapperBuilder? builder;
   final GoShellRouteWrapperPageBuilder? pageBuilder;
 
@@ -138,25 +143,44 @@ class GoShellRouteWrapper extends GoRouteWrapperBase {
   }
 }
 
-// TODO: Support [StatefulShellRoute]
-// class GoStatefulShellRouteWrapper extends GoRouteWrapperBase {
-//   const GoStatefulShellRouteWrapper({
-//     this.builder,
-//     this.pageBuilder,
-//   });
+class GoStatefulShellRouteWrapper extends GoRouteWrapperBase {
+  const GoStatefulShellRouteWrapper({
+    this.builder,
+    this.pageBuilder,
+    required GoStatefulShellNavigationContainerBuilder
+        this.navigatorContainerBuilder,
+  });
 
-//   final GoShellRouteWrapperBuilder? builder;
-//   final GoShellRouteWrapperPageBuilder? pageBuilder;
+  const GoStatefulShellRouteWrapper.indexedStack({
+    this.builder,
+    this.pageBuilder,
+  }) : navigatorContainerBuilder = null;
 
-//   ShellRoute $route({
-//     List<RouteBase> routes = const <RouteBase>[],
-//     List<NavigatorObserver>? observers,
-//     GlobalKey<NavigatorState>? navigatorKey,
-//   }) {
-//     return StatefulShellRoute(
-//       builder: builder,
-//       pageBuilder: pageBuilder,
+  final GoStatefulShellRouteWrapperBuilder? builder;
+  final GoStatefulShellRouteWrapperPageBuilder? pageBuilder;
+  final GoStatefulShellNavigationContainerBuilder? navigatorContainerBuilder;
 
-//     );
-//   }
-// }
+  StatefulShellRoute $route({
+    required List<StatefulShellBranch> branches,
+    List<NavigatorObserver>? observers,
+    GlobalKey<NavigatorState>? parentNavigatorKey,
+    String? restorationScopeId,
+  }) {
+    return navigatorContainerBuilder == null
+        ? StatefulShellRoute.indexedStack(
+            branches: branches,
+            builder: builder,
+            pageBuilder: pageBuilder,
+            parentNavigatorKey: parentNavigatorKey,
+            restorationScopeId: restorationScopeId,
+          )
+        : StatefulShellRoute(
+            branches: branches,
+            navigatorContainerBuilder: navigatorContainerBuilder!,
+            builder: builder,
+            pageBuilder: pageBuilder,
+            parentNavigatorKey: parentNavigatorKey,
+            restorationScopeId: restorationScopeId,
+          );
+  }
+}
