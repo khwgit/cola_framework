@@ -62,7 +62,7 @@ class GoRouterInfoState<T extends GoRouteInfo> implements GoRouterState {
   String? get fullPath => _state.fullPath;
 
   @override
-  String get location => _state.location;
+  Uri get uri => _state.uri;
 
   @override
   String? get name => _state.name;
@@ -90,12 +90,6 @@ class GoRouterInfoState<T extends GoRouteInfo> implements GoRouterState {
 
   @override
   String? get path => _state.path;
-
-  @override
-  Map<String, List<String>> get queryParametersAll => _state.queryParametersAll;
-
-  @override
-  Map<String, String> get queryParameters => _state.queryParameters;
 
   @override
   String get matchedLocation => _state.matchedLocation;
