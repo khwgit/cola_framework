@@ -9,16 +9,6 @@ import 'package:stack_trace/stack_trace.dart';
 import '../../utils.dart';
 import 'app_state_base.dart';
 
-class JsonLog {
-  const JsonLog(
-    this.json, [
-    this.title = '',
-  ]);
-
-  final Map<String, dynamic>? json;
-  final String title;
-}
-
 abstract class AppServiceBase<State extends AppStateBase>
     extends StateController<State> {
   AppServiceBase(super.state) {
@@ -31,10 +21,9 @@ abstract class AppServiceBase<State extends AppStateBase>
   @protected
   void setLoggingStyle() {
     debug(() {
-      hierarchicalLoggingEnabled = true;
-
-      const encoder = JsonEncoder.withIndent('  ');
       final logger = this.logger.parent ?? Logger.root;
+
+      hierarchicalLoggingEnabled = true;
       if (kDebugMode) {
         recordStackTraceAtLevel = Level.SEVERE;
         logger.level = Level.ALL;
@@ -51,36 +40,16 @@ abstract class AppServiceBase<State extends AppStateBase>
           _ => '\x1b[90m',
         };
 
-        final object = record.object;
-        if (kIsWeb && object is JsonLog) {
-          log(
-            '$start${object.title}$end',
-            time: record.time,
-            sequenceNumber: record.sequenceNumber,
-            level: record.level.value,
-            name: record.loggerName,
-            zone: record.zone,
-            error: record.error,
-            stackTrace: record.stackTrace,
-          );
-          final message = encoder
-              .convert(object.json)
-              .split('\n')
-              .map((p) => '$start$p$end')
-              .join('\n');
-          debugPrint(message);
-        } else {
-          log(
-            '$start${record.message}$end',
-            time: record.time,
-            sequenceNumber: record.sequenceNumber,
-            level: record.level.value,
-            name: record.loggerName,
-            zone: record.zone,
-            error: record.error,
-            stackTrace: record.stackTrace,
-          );
-        }
+        log(
+          '$start${record.message}$end',
+          time: record.time,
+          sequenceNumber: record.sequenceNumber,
+          level: record.level.value,
+          name: record.loggerName,
+          zone: record.zone,
+          error: record.error,
+          stackTrace: record.stackTrace,
+        );
 
         if (record.level >= Level.SEVERE) {
           final error = record.error;
@@ -97,7 +66,7 @@ abstract class AppServiceBase<State extends AppStateBase>
     });
   }
 
-  /// Logs the name of [function] and [arguments] if any.
+  /// Logs the name of caller and [arguments] if any.
   ///
   /// It is used for debug purpose.
   @protected
@@ -106,6 +75,19 @@ abstract class AppServiceBase<State extends AppStateBase>
   ]) {
     logger.fine(
       '[${Trace.current(1).frames[0].member?.split('.').last}(${arguments.map((e) => e.toString()).join(',')})]',
+    );
+  }
+
+  @protected
+  void print(Object? object, {int? wrapWidth}) {
+    const encoder = JsonEncoder.withIndent('  ');
+    return debugPrint(
+      switch (object) {
+        String() => object,
+        Map<String, dynamic>() => encoder.convert(object),
+        _ => object?.toString(),
+      },
+      wrapWidth: wrapWidth,
     );
   }
 
