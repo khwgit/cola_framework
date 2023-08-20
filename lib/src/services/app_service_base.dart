@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' as foundation;
+import 'package:flutter/foundation.dart' hide debugPrint;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:stack_trace/stack_trace.dart';
@@ -78,10 +79,13 @@ abstract class AppServiceBase<State extends AppStateBase>
     );
   }
 
+  /// Prints the [object] to the console.
+  ///
+  /// If [object] is a json object, log the formatted string.
   @protected
-  void print(Object? object, {int? wrapWidth}) {
+  void debugPrint(Object? object, {int? wrapWidth}) {
     const encoder = JsonEncoder.withIndent('  ');
-    return debugPrint(
+    return foundation.debugPrint(
       switch (object) {
         String() => object,
         Map<String, dynamic>() => encoder.convert(object),
