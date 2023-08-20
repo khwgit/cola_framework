@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
@@ -7,6 +8,16 @@ import 'package:stack_trace/stack_trace.dart';
 
 import '../../utils.dart';
 import 'app_state_base.dart';
+
+class JsonLog {
+  const JsonLog(
+    this.json, [
+    this.title = '',
+  ]);
+
+  final Map<String, dynamic>? json;
+  final String title;
+}
 
 abstract class AppServiceBase<State extends AppStateBase>
     extends StateController<State> {
@@ -21,6 +32,8 @@ abstract class AppServiceBase<State extends AppStateBase>
   void setLoggingStyle() {
     debug(() {
       hierarchicalLoggingEnabled = true;
+
+      const encoder = JsonEncoder.withIndent('  ');
       final logger = this.logger.parent ?? Logger.root;
       if (kDebugMode) {
         recordStackTraceAtLevel = Level.SEVERE;
@@ -38,16 +51,36 @@ abstract class AppServiceBase<State extends AppStateBase>
           _ => '\x1b[90m',
         };
 
-        log(
-          '$start${record.message}$end',
-          time: record.time,
-          sequenceNumber: record.sequenceNumber,
-          level: record.level.value,
-          name: record.loggerName,
-          zone: record.zone,
-          error: record.error,
-          stackTrace: record.stackTrace,
-        );
+        final object = record.object;
+        if (kIsWeb && object is JsonLog) {
+          log(
+            '$start${object.title}$end',
+            time: record.time,
+            sequenceNumber: record.sequenceNumber,
+            level: record.level.value,
+            name: record.loggerName,
+            zone: record.zone,
+            error: record.error,
+            stackTrace: record.stackTrace,
+          );
+          final message = encoder
+              .convert(object.json)
+              .split('\n')
+              .map((p) => '$start$p$end')
+              .join('\n');
+          debugPrint(message);
+        } else {
+          log(
+            '$start${record.message}$end',
+            time: record.time,
+            sequenceNumber: record.sequenceNumber,
+            level: record.level.value,
+            name: record.loggerName,
+            zone: record.zone,
+            error: record.error,
+            stackTrace: record.stackTrace,
+          );
+        }
 
         if (record.level >= Level.SEVERE) {
           final error = record.error;
