@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' as foundation;
+import 'package:flutter/foundation.dart' hide debugPrint;
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:logging/logging.dart';
 import 'package:stack_trace/stack_trace.dart';
@@ -20,8 +22,9 @@ abstract class AppServiceBase<State extends AppStateBase>
   @protected
   void setLoggingStyle() {
     debug(() {
-      hierarchicalLoggingEnabled = true;
       final logger = this.logger.parent ?? Logger.root;
+
+      hierarchicalLoggingEnabled = true;
       if (kDebugMode) {
         recordStackTraceAtLevel = Level.SEVERE;
         logger.level = Level.ALL;
@@ -64,7 +67,7 @@ abstract class AppServiceBase<State extends AppStateBase>
     });
   }
 
-  /// Logs the name of [function] and [arguments] if any.
+  /// Logs the name of caller and [arguments] if any.
   ///
   /// It is used for debug purpose.
   @protected
@@ -73,6 +76,22 @@ abstract class AppServiceBase<State extends AppStateBase>
   ]) {
     logger.fine(
       '[${Trace.current(1).frames[0].member?.split('.').last}(${arguments.map((e) => e.toString()).join(',')})]',
+    );
+  }
+
+  /// Prints the [object] to the console.
+  ///
+  /// If [object] is a json object, log the formatted string.
+  @protected
+  void debugPrint(Object? object, {int? wrapWidth}) {
+    const encoder = JsonEncoder.withIndent('  ');
+    return foundation.debugPrint(
+      switch (object) {
+        String() => object,
+        Map<String, dynamic>() => encoder.convert(object),
+        _ => object?.toString(),
+      },
+      wrapWidth: wrapWidth,
     );
   }
 
