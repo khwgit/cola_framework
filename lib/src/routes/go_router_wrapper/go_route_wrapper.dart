@@ -14,11 +14,14 @@ class GoRouteWrapper extends GoRouteWrapperBase {
     this.builder,
     this.pageBuilder,
     this.redirect,
+    this.onExit,
   });
 
   final GoRouterWidgetBuilder? builder;
   final GoRouterPageBuilder? pageBuilder;
   final GoRouterRedirect? redirect;
+  final ExitCallback? onExit;
+
   GoRouteWrapperToLocation? $location;
 
   GoRoute $route({
@@ -35,6 +38,7 @@ class GoRouteWrapper extends GoRouteWrapperBase {
       redirect: redirect,
       routes: routes,
       parentNavigatorKey: parentNavigatorKey,
+      onExit: onExit,
     );
   }
 
@@ -56,11 +60,14 @@ class GoInfoRouteWrapper<T extends GoRouteInfo> extends GoRouteWrapperBase {
     this.builder,
     this.pageBuilder,
     this.redirect,
+    this.onExit,
   });
 
   final GoInfoRouteWrapperBuilder<T>? builder;
   final GoInfoRouteWrapperPageBuilder<T>? pageBuilder;
   final GoInfoRouteWrapperRedirect<T>? redirect;
+  final ExitCallback? onExit;
+
   GoInfoRouteWrapperToLocation<T>? $location;
 
   GoRoute $route({
@@ -100,6 +107,7 @@ class GoInfoRouteWrapper<T extends GoRouteInfo> extends GoRouteWrapperBase {
       redirect: redirect == null
           ? null
           : (context, state) => redirect!(context, getState(state)),
+      onExit: onExit,
     );
   }
 
