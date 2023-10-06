@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:go_router/src/misc/errors.dart';
 
 import 'go_route_info.dart';
 
