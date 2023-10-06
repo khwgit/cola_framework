@@ -14,7 +14,7 @@ dependencies:
   
   go_router: ^11.1.0
   hooks_riverpod: ^2.4.0
-  meta: ^1.9.0
+  meta: ^1.9.1
   logging: ^1.2.0
   stack_trace: ^1.11.0
 
