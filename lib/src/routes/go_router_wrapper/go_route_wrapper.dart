@@ -125,11 +125,6 @@ class GoShellRouteWrapper extends GoRouteWrapperBase {
     this.pageBuilder,
   });
 
-  const GoShellRouteWrapper.indexedStack({
-    this.builder,
-    this.pageBuilder,
-  });
-
   final GoShellRouteWrapperBuilder? builder;
   final GoShellRouteWrapperPageBuilder? pageBuilder;
 
