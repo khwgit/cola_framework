@@ -132,6 +132,7 @@ class GoShellRouteWrapper extends GoRouteWrapperBase {
     List<RouteBase> routes = const <RouteBase>[],
     List<NavigatorObserver>? observers,
     GlobalKey<NavigatorState>? navigatorKey,
+    GlobalKey<NavigatorState>? parentNavigatorKey,
     String? restorationScopeId,
   }) {
     return ShellRoute(
@@ -140,6 +141,7 @@ class GoShellRouteWrapper extends GoRouteWrapperBase {
       routes: routes,
       observers: observers,
       navigatorKey: navigatorKey,
+      parentNavigatorKey: parentNavigatorKey,
       // TODO: Review if it should be placed here
       restorationScopeId: restorationScopeId,
     );
