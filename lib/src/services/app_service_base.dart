@@ -13,14 +13,14 @@ import 'app_state_base.dart';
 abstract class AppServiceBase<State extends AppStateBase>
     extends StateController<State> {
   AppServiceBase(super.state) {
-    setLoggingStyle();
+    $setLoggingStyle();
   }
 
   @protected
   Logger get logger;
 
   @protected
-  void setLoggingStyle() {
+  void $setLoggingStyle() {
     debug(() {
       final logger = this.logger.parent ?? Logger.root;
 
@@ -71,19 +71,22 @@ abstract class AppServiceBase<State extends AppStateBase>
   ///
   /// It is used for debug purpose.
   @protected
-  void trace([
+  void $trace([
     List<dynamic> arguments = const [],
   ]) {
     logger.fine(
-      '[${Trace.current(1).frames[0].member?.split('.').last}(${arguments.map((e) => e.toString()).join(',')})]',
+      '[${$functionName}(${arguments.map((e) => e.toString()).join(',')})]',
     );
   }
+
+  String? get $functionName =>
+      Trace.current(1).frames[0].member?.split('.').last;
 
   /// Prints the [object] to the console.
   ///
   /// If [object] is a json object, log the formatted string.
   @protected
-  void debugPrint(Object? object, {int? wrapWidth}) {
+  void $debugPrint(Object? object, {int? wrapWidth}) {
     const encoder = JsonEncoder.withIndent('  ');
     return foundation.debugPrint(
       switch (object) {

@@ -92,4 +92,7 @@ class GoRouterInfoState<T extends GoRouteInfo> implements GoRouterState {
 
   @override
   String get matchedLocation => _state.matchedLocation;
+
+  @override
+  GoRoute? get topRoute => _state.topRoute;
 }
