@@ -74,11 +74,11 @@ abstract class AppServiceBase<State extends AppStateBase>
     List<dynamic> arguments = const [],
   ]) {
     logger.fine(
-      '[$functionName(${arguments.map((e) => e.toString()).join(',')})]',
+      '[${Trace.current(1).frames[0].member?.split('.').last}(${arguments.map((e) => e.toString()).join(',')})]',
     );
   }
 
-  String? get functionName =>
+  String? get currentFunctionName =>
       Trace.current(1).frames[0].member?.split('.').last;
 
   /// Prints the [object] to the console.
