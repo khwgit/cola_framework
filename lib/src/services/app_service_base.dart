@@ -70,23 +70,21 @@ abstract class AppServiceBase<State extends AppStateBase>
   /// Logs the name of caller and [arguments] if any.
   ///
   /// It is used for debug purpose.
-  @protected
-  void $trace([
+  void trace([
     List<dynamic> arguments = const [],
   ]) {
     logger.fine(
-      '[${$functionName}(${arguments.map((e) => e.toString()).join(',')})]',
+      '[$functionName(${arguments.map((e) => e.toString()).join(',')})]',
     );
   }
 
-  String? get $functionName =>
+  String? get functionName =>
       Trace.current(1).frames[0].member?.split('.').last;
 
   /// Prints the [object] to the console.
   ///
   /// If [object] is a json object, log the formatted string.
-  @protected
-  void $debugPrint(Object? object, {int? wrapWidth}) {
+  void debugPrint(Object? object, {int? wrapWidth}) {
     const encoder = JsonEncoder.withIndent('  ');
     return foundation.debugPrint(
       switch (object) {
