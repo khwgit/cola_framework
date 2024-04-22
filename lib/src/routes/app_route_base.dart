@@ -45,6 +45,9 @@ abstract class AppRouteBase<StateT> extends ChangeNotifier {
   //   }
   // }
 
+  /// Guards the route based on the [checker] function.
+  ///
+  /// It will redirect to [target] if the [checker] returns 'true'.
   @protected
   FutureOr<String?> guard(
     FutureOr<bool> Function(StateT state) checker,

@@ -19,7 +19,7 @@ abstract class AppServiceBase<StateT> extends StateController<StateT> {
 
   /// Initializes the service.
   ///
-  /// It can be called multiple times but it will be executed only once.
+  /// It can be called multiple times but it will [bootstrap] only once.
   /// Returns 'false' if [bootstrap] is already called before.
   Future<bool> initialize() async {
     if (_completer != null) {
