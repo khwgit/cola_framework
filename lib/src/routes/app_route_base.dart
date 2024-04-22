@@ -1,20 +1,18 @@
 import 'dart:async';
 
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../services.dart';
 import 'go_router_wrapper.dart';
 
-abstract class AppRouteBase<State extends AppStateBase> extends ChangeNotifier {
+abstract class AppRouteBase<StateT> extends ChangeNotifier {
   AppRouteBase() {
     /// Initializes [$routes] at the beginning
     $routes;
   }
 
-  State get state;
+  AppServiceBase<StateT> get service;
 
   List<RouteBase> get $routes;
 
@@ -23,40 +21,40 @@ abstract class AppRouteBase<State extends AppStateBase> extends ChangeNotifier {
     GoRouterState state,
   );
 
-  void $listen(
-    Ref ref,
-    AlwaysAliveProviderListenable provider, {
-    bool fireImmediately = false,
-  }) {
-    $listenAll(ref, [provider], fireImmediately: fireImmediately);
-  }
+  // void $listen(
+  //   Ref ref,
+  //   AlwaysAliveProviderListenable provider, {
+  //   bool fireImmediately = false,
+  // }) {
+  //   $listenAll(ref, [provider], fireImmediately: fireImmediately);
+  // }
 
-  void $listenAll(
-    Ref ref,
-    List<AlwaysAliveProviderListenable> providers, {
-    bool fireImmediately = false,
-  }) {
-    for (var provider in providers) {
-      ref.listen(
-        provider,
-        (previous, next) => SchedulerBinding.instance.addPostFrameCallback((_) {
-          notifyListeners();
-        }),
-        fireImmediately: fireImmediately,
-      );
-    }
-  }
+  // void $listenAll(
+  //   Ref ref,
+  //   List<AlwaysAliveProviderListenable> providers, {
+  //   bool fireImmediately = false,
+  // }) {
+  //   for (var provider in providers) {
+  //     ref.listen(
+  //       provider,
+  //       (previous, next) => SchedulerBinding.instance.addPostFrameCallback((_) {
+  //         notifyListeners();
+  //       }),
+  //       fireImmediately: fireImmediately,
+  //     );
+  //   }
+  // }
 
+  /// Guards the route based on the [checker] function.
+  ///
+  /// It will redirect to [target] if the [checker] returns 'true'.
   @protected
-  String? guard(
-    bool Function(State state) checker,
+  FutureOr<String?> guard(
+    FutureOr<bool> Function(StateT state) checker,
     GoRouteConfig? target, [
     GoRouteConfig? fallback,
-  ]) {
-    final state = this.state;
-    if (!state.isReady) return null;
-
-    final result = checker(state) ? target : fallback;
-    return result?.location;
+  ]) async {
+    await service.initialize();
+    return await checker(service.state) ? target?.location : fallback?.location;
   }
 }

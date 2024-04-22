@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -8,13 +9,34 @@ import 'package:logging/logging.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 import '../../utils.dart';
-import 'app_state_base.dart';
 
-abstract class AppServiceBase<State extends AppStateBase>
-    extends StateController<State> {
+abstract class AppServiceBase<StateT> extends StateController<StateT> {
   AppServiceBase(super.state) {
     $setLoggingStyle();
   }
+
+  Completer<void>? _completer;
+
+  /// Initializes the service.
+  ///
+  /// It can be called multiple times but it will [bootstrap] only once.
+  /// Returns 'false' if [bootstrap] is already called before.
+  Future<bool> initialize() async {
+    if (_completer != null) {
+      return _completer!.future.then((value) => false);
+    }
+
+    _completer ??= Completer<void>();
+    await bootstrap();
+    _completer!.complete();
+    return true;
+  }
+
+  /// Bootstraps the service.
+  ///
+  /// It will be called only once in [initialize] method and should be implemented by the child class.
+  @protected
+  Future<void> bootstrap();
 
   @protected
   Logger get logger;
@@ -98,9 +120,9 @@ abstract class AppServiceBase<State extends AppStateBase>
 
   @override
   @protected
-  State update(State Function(State state) cb) => super.update(cb);
+  StateT update(StateT Function(StateT state) cb) => super.update(cb);
 
   @override
   @protected
-  set state(State value) => super.state = value;
+  set state(StateT value) => super.state = value;
 }
