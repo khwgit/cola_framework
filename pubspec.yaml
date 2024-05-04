@@ -12,9 +12,9 @@ dependencies:
   flutter:
     sdk: flutter
   
-  go_router: ^13.1.0
-  hooks_riverpod: ^2.4.0
-  meta: ^1.9.1
+  go_router: ^14.0.0
+  hooks_riverpod: ^2.5.0
+  meta: any
   logging: ^1.2.0
   stack_trace: ^1.11.0
 
