@@ -152,6 +152,7 @@ class GoStatefulShellRouteWrapper extends GoRouteWrapperBase {
   const GoStatefulShellRouteWrapper({
     this.builder,
     this.pageBuilder,
+    this.redirect,
     required GoStatefulShellNavigationContainerBuilder
         this.navigatorContainerBuilder,
   });
@@ -159,11 +160,13 @@ class GoStatefulShellRouteWrapper extends GoRouteWrapperBase {
   const GoStatefulShellRouteWrapper.indexedStack({
     this.builder,
     this.pageBuilder,
+    this.redirect,
   }) : navigatorContainerBuilder = null;
 
   final GoStatefulShellRouteWrapperBuilder? builder;
   final GoStatefulShellRouteWrapperPageBuilder? pageBuilder;
   final GoStatefulShellNavigationContainerBuilder? navigatorContainerBuilder;
+  final GoRouterRedirect? redirect;
 
   StatefulShellRoute $route({
     required List<StatefulShellBranch> branches,
@@ -176,6 +179,7 @@ class GoStatefulShellRouteWrapper extends GoRouteWrapperBase {
             branches: branches,
             builder: builder,
             pageBuilder: pageBuilder,
+            redirect: redirect,
             parentNavigatorKey: parentNavigatorKey,
             restorationScopeId: restorationScopeId,
           )
@@ -184,6 +188,7 @@ class GoStatefulShellRouteWrapper extends GoRouteWrapperBase {
             navigatorContainerBuilder: navigatorContainerBuilder!,
             builder: builder,
             pageBuilder: pageBuilder,
+            redirect: redirect,
             parentNavigatorKey: parentNavigatorKey,
             restorationScopeId: restorationScopeId,
           );
